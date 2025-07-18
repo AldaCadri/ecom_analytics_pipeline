@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: stg_amazon_purchases
+    description: |
+      Staged Amazon order records: type-cast, trimmed, deduplicated on 
+      (survey_response_id, order_date, state, unit_price, quantity, product_code),
+      and filtered to valid dates, prices, quantities, and non-null state.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - survey_responseid
+            - order_date
+            - state
+            - unit_price
+            - quantity
+            - product_code
+
+    columns:
+      - name: survey_responseid
+        description: User ID linking each order to the survey
+        tests: [not_null]
+
+      - name: order_date
+        description: Date the order was placed
+        tests: [not_null]
+
+      - name: state
+        description: Two-letter US state code for shipping address
+        
+      - name: unit_price
+        description: Purchase price per unit (USD)
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+
+      - name: quantity
+        description: Number of units purchased
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+
+      - name: product_code
+        description: ASIN or ISBN code of the product
+
+      - name: title
+        description: Product title (NULL if missing)
+        
+      - name: category
+        description: Upper-cased product category (NULL if missing)
+    
+      - name: order_year
+        description: Extracted year of the order date
+
+      - name: order_month
+        description: Extracted month of the order date
+
+      - name: order_quarter
+        description: Extracted quarter of the order date
+
+      - name: order_dow
+        description: Day-of-week (3-letter) of the order date
