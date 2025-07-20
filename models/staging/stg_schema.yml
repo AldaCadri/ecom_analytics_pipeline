@@ -65,8 +65,7 @@ models:
   - name: stg_survey
     description: |
       Staged survey responses:
-      - Cast age and household counts to integers  
-      - Map yes/true strings to booleans  
+      - Hispanic flag cast to boolean 
       - Trim and normalize text fields  
       - Filter out any rows missing survey_responseid
     tests:
@@ -78,77 +77,70 @@ models:
         description: Unique respondent ID (links purchases)
         tests: [not_null]
 
-      - name: age
-        description: Respondent age in years
-        tests: [not_null]
+      - name: age_group
+        description: Age bucket from survey, e.g. "25 - 34 years"
 
       - name: is_hispanic
-        description: Hispanic flag
-        tests: [not_null]
+        description: Boolean flag for Hispanic ethnicity
+        tests:
+          - not_null
 
       - name: race
-        description: Race category (upper-cased)
+        description: Respondent’s race category (uppercased)
 
       - name: education
-        description: Education level (upper-cased)
+        description: Highest education level (uppercased)
 
       - name: income_bracket
-        description: Household income bracket
+        description: Household income bracket as text
 
       - name: gender
-        description: Normalized gender- MALE/FEMALE/OTHER
-        
+        description: Raw gender entry trimmed and uppercased
 
       - name: sexual_orientation
-        description: Self-reported sexual orientation (upper-cased)
+        description: Self-reported sexual orientation (uppercased)
 
       - name: state
         description: State of residence (2-letter code)
 
-      - name: accounts_shared
-        description: Number of people sharing the Amazon account
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: "accounts_shared >= 1"
+      - name: accounts_shared_cat
+        description: “How many share account” bucket, e.g. “1 (just me!)”
 
-      - name: household_size
-        description: Respondent’s household size
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: "household_size >= 1"
+      - name: household_size_cat
+        description: Household size bucket, e.g. “4+”
 
       - name: purchase_frequency
-        description: Amazon purchase frequency bin
+        description: Amazon purchase frequency bucket
 
-      - name: uses_cigarettes
-        description: Cigarette use flag
+      - name: substance_use_cigarettes
+        description: Cigarette use frequency/text
 
-      - name: uses_marijuana
-        description: Marijuana use flag
+      - name: substance_use_marijuana
+        description: Marijuana use frequency/text
 
-      - name: uses_alcohol
-        description: Alcohol use flag
+      - name: substance_use_alcohol
+        description: Alcohol use frequency/text
 
-      - name: has_diabetes
-        description: Diabetes medication flag
+      - name: personal_diabetes
+        description: Diabetes medication usage text
 
-      - name: uses_wheelchair
-        description: Wheelchair use flag
+      - name: personal_wheelchair
+        description: Wheelchair usage text
 
       - name: life_changes
         description: Reported life events (nullable)
 
-      - name: sell_own_data
-        description: Consent to sell own data
+      - name: sell_your_data
+        description: Agreement to sell own data (text)
 
       - name: sell_consumer_data
-        description: Consent to sell consumer data
+        description: Agreement to sell consumer data (text)
 
       - name: small_biz_use
-        description: Use for small business flag
+        description: Likelihood to use data for small business (text)
 
       - name: census_use
-        description: Use for census research flag
+        description: Likelihood to use data for Census research (text)
 
       - name: research_society
-        description: Use for research/society flag
+        description: Likelihood to use data for academic/society research (text)
