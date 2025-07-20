@@ -60,3 +60,95 @@ models:
 
       - name: order_dow
         description: Day-of-week (3-letter) of the order date
+
+        
+  - name: stg_survey
+    description: |
+      Staged survey responses:
+      - Cast age and household counts to integers  
+      - Map yes/true strings to booleans  
+      - Trim and normalize text fields  
+      - Filter out any rows missing survey_responseid
+    tests:
+      - unique:
+          column_name: survey_responseid
+
+    columns:
+      - name: survey_responseid
+        description: Unique respondent ID (links purchases)
+        tests: [not_null]
+
+      - name: age
+        description: Respondent age in years
+        tests: [not_null]
+
+      - name: is_hispanic
+        description: Hispanic flag
+        tests: [not_null]
+
+      - name: race
+        description: Race category (upper-cased)
+
+      - name: education
+        description: Education level (upper-cased)
+
+      - name: income_bracket
+        description: Household income bracket
+
+      - name: gender
+        description: Normalized gender- MALE/FEMALE/OTHER
+        
+
+      - name: sexual_orientation
+        description: Self-reported sexual orientation (upper-cased)
+
+      - name: state
+        description: State of residence (2-letter code)
+
+      - name: accounts_shared
+        description: Number of people sharing the Amazon account
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "accounts_shared >= 1"
+
+      - name: household_size
+        description: Respondent’s household size
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "household_size >= 1"
+
+      - name: purchase_frequency
+        description: Amazon purchase frequency bin
+
+      - name: uses_cigarettes
+        description: Cigarette use flag
+
+      - name: uses_marijuana
+        description: Marijuana use flag
+
+      - name: uses_alcohol
+        description: Alcohol use flag
+
+      - name: has_diabetes
+        description: Diabetes medication flag
+
+      - name: uses_wheelchair
+        description: Wheelchair use flag
+
+      - name: life_changes
+        description: Reported life events (nullable)
+
+      - name: sell_own_data
+        description: Consent to sell own data
+
+      - name: sell_consumer_data
+        description: Consent to sell consumer data
+
+      - name: small_biz_use
+        description: Use for small business flag
+
+      - name: census_use
+        description: Use for census research flag
+
+      - name: research_society
+        description: Use for research/society flag
