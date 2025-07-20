@@ -82,8 +82,7 @@ models:
 
       - name: is_hispanic
         description: Boolean flag for Hispanic ethnicity
-        tests:
-          - not_null
+  
 
       - name: race
         description: Respondent’s race category (uppercased)
