@@ -12,5 +12,5 @@ with enriched as (
   from {{ ref('ref_orders_enriched') }}
 )
 
-select * from enriched;
+select * from enriched
 
