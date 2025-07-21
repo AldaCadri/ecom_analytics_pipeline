@@ -51,12 +51,15 @@ models:
 seeds:
   ecom_analytics_dbt:
     state_codes:
-      file: data/state_codes.csv
-      header: true
+      enabled: true
+      column_types:
+        postal_code:    varchar(2)
+        state_name:     varchar(100)
+        state_fips:     varchar(2)
+
 
 
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
-
 # In dbt, the default materialization for a model is a view. This means, when you run 
 # dbt run or dbt build, all of your models will be built as a view in your data platform. 
 # The configuration below will override this setting for models in the example folder to 
