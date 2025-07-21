@@ -237,3 +237,23 @@ models:
                 - '55'
                 - '56'
                 - '72'
+  
+  
+  - name: stg_state_codes
+    description: |
+      Staged state codes mapping postal_code ↔ state_name ↔ state_fips.
+    tests:
+      - unique:
+          column_name: postal_code
+      - not_null:
+          column_name: postal_code
+      - not_null:
+          column_name: state_fips
+
+    columns:
+      - name: postal_code
+        description: USPS two-letter code (e.g. “CA”)
+      - name: state_name
+        description: Full state name (e.g. “California”)
+      - name: state_fips
+        description: Two-character FIPS code with leading zeros (e.g. “06”)
