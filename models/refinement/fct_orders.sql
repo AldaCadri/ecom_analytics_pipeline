@@ -1,11 +1,16 @@
 {{ config(materialized='table') }}
 
-select
-  survey_responseid      as user_key,
-  order_date             as date_key,
-  final_fips             as state_key,
-  product_code           as product_key,
-  quantity,
-  unit_price,
-  order_value
-from {{ ref('ref_orders_enriched') }}
+with enriched as (
+  select
+    survey_responseid      as user_key,
+    order_date             as date_key,
+    coalesce(final_fips, '00')      as state_key,     -- ‘00’ = unknown/digital
+    coalesce(product_code, 'UNKNOWN') as product_key, -- catch any missing ASINs
+    quantity,
+    unit_price,
+    order_value
+  from {{ ref('ref_orders_enriched') }}
+)
+
+select * from enriched;
+
