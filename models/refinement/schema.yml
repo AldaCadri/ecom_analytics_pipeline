@@ -1,18 +1,68 @@
 version: 2
 
 models:
-  - name: dim_state
-    description: |
-      Final state dimension, based on staging.
+
+  - name: ref_orders_enriched
+    description: "Orders enriched with user & state details plus order_value metric."
+    tests:
+      - not_null: 
+          column_name: survey_responseid
+      - not_null:
+          column_name: order_date
+      - dbt_utils.expression_is_true:
+          expression: "order_value >= 0"
+    columns:
+      - name: final_postal
+        description: "Final postal code (shipping or user home)."
+      - name: final_state_name
+        description: "Final state name (shipping or user home)."
+      - name: final_fips
+        description: "Final two-digit FIPS code."
+
+  - name: dim_date
+    description: "Date dimension extracted from orders."
     tests:
       - unique:
-          column_name: postal_code
+          column_name: date_key
       - not_null:
-          column_name: postal_code
+          column_name: date_key
 
+  - name: dim_user
+    description: "User dimension derived from enriched orders."
+    tests:
+      - unique:
+          column_name: user_key
+      - not_null:
+          column_name: user_key
+
+  - name: dim_state
+    description: "State dimension: postal ↔ name ↔ fips."
+    tests:
+      - unique:
+          column_name: state_postal
+      - not_null:
+          column_name: state_postal
     columns:
-      - name: postal_code
-      - name: state_name
-        tests: [not_null]
       - name: state_fips
-        tests: [not_null]
+        tests:
+          - not_null
+
+  - name: dim_product
+    description: "Product dimension with gift-card flag."
+    tests:
+      - unique:
+          column_name: product_code
+      - not_null:
+          column_name: product_code
+    columns:
+      - name: is_gift_card
+        description: "Flag indicating whether the title is a gift card."
+
+  - name: fct_orders
+    description: "Fact table of orders with keys to date, user, state, and product."
+    tests:
+      - not_null: {column_name: user_key}
+      - not_null: {column_name: date_key}
+      - not_null: {column_name: state_key}
+      - not_null: {column_name: product_key}
+
