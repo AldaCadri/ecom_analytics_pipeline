@@ -48,6 +48,12 @@ models:
       +schema: delivery
       +materialized: view
 
+seeds:
+  ecom_analytics_dbt:
+    state_codes:
+      file: data/state_codes.csv
+      header: true
+
 
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
