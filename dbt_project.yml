@@ -48,14 +48,6 @@ models:
       +schema: delivery
       +materialized: view
 
-seeds:
-  ecom_analytics_dbt:
-    state_codes:
-      enabled: true
-      column_types:
-        postal_code:    varchar(2)
-        state_name:     varchar(100)
-        state_fips:     varchar(2)
 
 
 
