@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dim_state
+    description: |
+      Final state dimension, based on staging.
+    tests:
+      - unique:
+          column_name: postal_code
+      - not_null:
+          column_name: postal_code
+
+    columns:
+      - name: postal_code
+      - name: state_name
+        tests: [not_null]
+      - name: state_fips
+        tests: [not_null]
