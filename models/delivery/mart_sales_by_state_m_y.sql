@@ -17,4 +17,4 @@ join {{ ref('dim_state')  }}   s
 where d.year >= date_part('year', current_date()) - 2  
 
 group by 1,2,3
-order by 2 desc, 1 desc, 3;
+order by 2 desc, 1 desc, 3
