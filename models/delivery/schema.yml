@@ -1,0 +1,122 @@
+version: 2
+
+models:
+
+  - name: mart_sales_by_state_month
+    description: |
+      Monthly sales performance by state.  
+      - Defaults to the last 3 years of data for dashboard responsiveness.  
+      - Exposes `year` so users can slice any calendar year (2018–2023).
+    tests:
+      - not_null: {column_name: month}
+      - not_null: {column_name: year}
+      - not_null: {column_name: state_key}
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [month, year, state_key]
+    columns:
+      - name: month
+        description: The first day of the calendar month (time grain).
+      - name: year
+        description: Calendar year extracted from `month`.
+      - name: state_key
+        description: Two-digit FIPS code for the state (matches `dim_state.state_fips`).
+      - name: orders_count
+        description: Number of orders in that state/month.
+      - name: total_revenue
+        description: Sum of `order_value` for that state/month.
+      - name: avg_order_value
+        description: Average order value for that state/month.
+
+  - name: mart_sales_by_category_month
+    description: |
+      Monthly sales performance by product category.  
+      - Defaults to the last 3 years of data.  
+      - Exposes `year` for full-history filtering.
+    tests:
+      - not_null: {column_name: month}
+      - not_null: {column_name: year}
+      - not_null: {column_name: category}
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [month, year, category]
+    columns:
+      - name: month
+        description: The first day of the calendar month.
+      - name: year
+        description: Calendar year extracted from `month`.
+      - name: category
+        description: Product category (e.g. “Books”, “Electronics”).
+      - name: orders_count
+        description: Number of orders for that category/month.
+      - name: total_revenue
+        description: Sum of `order_value` for that category/month.
+      - name: avg_order_value
+        description: Average order value for that category/month.
+
+  - name: mart_customer_segment_metrics
+    description: |
+      Aggregate metrics by customer demographic segment:
+      age, income, Hispanic flag, household size.
+    tests:
+      - not_null: {column_name: age_group}
+      - not_null: {column_name: income_bracket}
+    columns:
+      - name: age_group
+        description: User age bracket (e.g. “25–34”).
+      - name: income_bracket
+        description: Household income bracket.
+      - name: is_hispanic
+        description: Hispanic/Latino flag.
+      - name: household_size_cat
+        description: Household size category.
+      - name: segment_users
+        description: Distinct users in the segment.
+      - name: segment_revenue
+        description: Sum of order_value in the segment.
+      - name: avg_order_value
+        description: Average order value in the segment.
+      - name: avg_orders_per_user
+        description: Average orders per user in the segment.
+
+  - name: mart_cohort_retention
+    description: |
+      Cohort table showing how many users from each first-order month
+      return in each subsequent month.
+    tests:
+      - not_null: {column_name: cohort_month}
+      - not_null: {column_name: months_after}
+    columns:
+      - name: cohort_month
+        description: Month of each user’s first order.
+      - name: months_after
+        description: Months since first order.
+      - name: active_users
+        description: Number of users still making orders.
+
+  - name: mart_top_products
+    description: |
+      Top 50 products by revenue and units sold.
+    tests:
+      - not_null: {column_name: product_key}
+    columns:
+      - name: product_key
+        description: ASIN/ISBN code (coalesced to 'UNKNOWN' if missing).
+      - name: units_sold
+        description: Total quantity sold.
+      - name: total_revenue
+        description: Sum of order_value for that product.
+
+  - name: mart_revenue_by_income_state
+    description: |
+      Revenue and order count cross-tabbed by income bracket and state.
+    tests:
+      - not_null: {column_name: income_bracket}
+      - not_null: {column_name: state_key}
+    columns:
+      - name: income_bracket
+        description: Household income bracket.
+      - name: state_key
+        description: Two-digit state FIPS code.
+      - name: orders_count
+        description: Number of orders in that segment.
+      - name: total_revenue
+        description: Sum of order_value in that segment.
