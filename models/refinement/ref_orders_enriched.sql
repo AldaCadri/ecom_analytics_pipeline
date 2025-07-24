@@ -22,11 +22,21 @@ orders as (
   from {{ ref('stg_amazon_purchases') }}
 ),
 
--- Staged survey: gives user_state_name
+-- 2) Staged survey: now selecting all demographic fields
 users as (
   select
     survey_responseid,
-    state               as user_state_name
+    age_group,
+    is_hispanic,
+    race,
+    education,
+    income_bracket,
+    gender,
+    sexual_orientation,
+    state  as user_state_name,
+    accounts_shared_cat,
+    household_size_cat,
+    purchase_frequency
   from {{ ref('stg_survey') }}
 ),
 
@@ -49,7 +59,17 @@ joined as (
 
   select
     o.*,
+    u.age_group,
+    u.is_hispanic,
+    u.race,
+    u.education,
+    u.income_bracket,
+    u.gender,
+    u.sexual_orientation,
     u.user_state_name,
+    u.accounts_shared_cat,
+    u.household_size_cat,
+    u.purchase_frequency,
 
     -- lookup shipping postal → state dimension
     s_ship.state_name   as shipping_state_name,
