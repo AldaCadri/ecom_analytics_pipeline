@@ -9,7 +9,10 @@ with raw as (
     CAST(quantity                AS integer)                as quantity,
     trim(asin_isbn_prod_code)                               as product_code,
     nullif(trim(title), '')                                 as title,
-    upper(nullif(trim(category), ''))                       as category
+    coalesce(
+    nullif(upper(category), ''),    -- uppercase non‐empty
+    'UNKNOWN'                       -- replace empty or null
+  ) as category
   from {{ source('raw_data','raw_amazon_purchases') }}
 ),
 
