@@ -29,11 +29,11 @@ sources:
           from the same Amazon users.  
           Each row includes demographics (age, gender, income_bracket, etc.)
           and lifestyle/behavior flags, keyed by survey_response_id.
-      - name: raw_fields
-        description: |
-          Metadata for the survey: maps each column name in survey_raw
-          to a human-readable label and its data type.  
-          Used to document and validate survey fields in later models.
+      #- name: raw_fields
+      # description: |
+       #   Metadata for the survey: maps each column name in survey_raw
+       #   to a human-readable label and its data type.  
+       #   Used to document and validate survey fields in later models.
       - name: raw_state_demographics
         description: |
           Raw JSON payloads loaded from the U.S. Census ACS 5-Year API
