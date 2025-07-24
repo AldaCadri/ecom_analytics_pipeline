@@ -4,7 +4,7 @@ select
   survey_responseid,
 
   -- Age bucket as text
-  trim(q_demos_age)                         as age_group,
+  trim(q_demos_age)   as age_group,
 
   -- Boolean value
   case
