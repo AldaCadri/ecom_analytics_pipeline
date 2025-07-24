@@ -42,6 +42,6 @@ sources:
           • survey_year: the year of the 5-Year estimate  
           • json_payload: VARIANT array [state_name, median_income, total_population, state_fips]
       
-      - name: state_codes
+      - name: raw_state_codes
         description: |
          Mapping state codes  
