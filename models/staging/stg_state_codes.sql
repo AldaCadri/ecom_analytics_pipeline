@@ -5,4 +5,4 @@ select
   postal_code,
   state_name,
   state_fips
-from {{ source('raw_data','state_codes') }}
+from {{ source('raw_data','raw_state_codes') }}
