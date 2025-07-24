@@ -29,21 +29,18 @@ models:
   ecom_analytics_dbt:
     +materialized: view
 
-    # 1) source: just definitions, no materializations
-    source:
-      +materialized: ephemeral
 
-    # 2) staging: cleaned raw → staging schema
+    # staging: cleaned raw → staging schema
     staging:
       +schema: staging
       +materialized: table
 
-    # 3) refinement: business logic → refined schema
+    # refinement: business logic → refined schema
     refinement:
       +schema: refinement
       +materialized: table
 
-    # 4) delivery: final marts → delivery schema
+    # delivery: final marts → delivery schema
     delivery:
       +schema: delivery
       +materialized: view

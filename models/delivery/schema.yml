@@ -2,7 +2,7 @@ version: 2
 
 models:
 
-  - name: mart_sales_by_state_month
+  - name: mart_sales_by_state_m_y
     description: |
       Monthly sales performance by state.  
       - Defaults to the last 3 years of data for dashboard responsiveness.  
@@ -27,7 +27,7 @@ models:
       - name: avg_order_value
         description: Average order value for that state/month.
 
-  - name: mart_sales_by_category_month
+  - name: mart_sales_by_category_m_y
     description: |
       Monthly sales performance by product category.  
       - Defaults to the last 3 years of data.  
