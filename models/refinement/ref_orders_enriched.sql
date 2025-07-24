@@ -10,7 +10,7 @@ orders as (
     state as shipping_postal,
     unit_price,
     quantity,
-    product_code,
+    coalesce(product_code, 'UNKNOWN') as product_key,
     title,
     category,
     order_year,

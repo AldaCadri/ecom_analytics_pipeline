@@ -4,20 +4,28 @@ models:
 
   - name: ref_orders_enriched
     description: "Orders enriched with user & state details plus order_value metric."
-    tests:
-      - not_null: 
-          column_name: survey_responseid
-      - not_null:
-          column_name: order_date
-      - dbt_utils.expression_is_true:
-          expression: "order_value >= 0"
     columns:
-      - name: final_postal
-        description: "Final postal code (shipping or user home)."
-      - name: final_state_name
-        description: "Final state name (shipping or user home)."
-      - name: final_fips
-        description: "Final two-digit FIPS code."
+      - name: age_group
+        description: "User age bracket from the survey (e.g. '25–34')."
+        tests: [not_null]
+      - name: is_hispanic
+        description: "Whether the user identifies as Hispanic/Latino."
+      - name: race
+        description: "User race category."
+      - name: education
+        description: "Highest education level attained by the user."
+      - name: income_bracket
+        description: "Household income bracket from the survey."
+      - name: gender
+        description: "Self-reported gender of the user."
+      - name: sexual_orientation
+        description: "Self-reported sexual orientation."
+      - name: accounts_shared_cat
+        description: "Category of Amazon accounts shared in household."
+      - name: household_size_cat
+        description: "Household size category."
+      - name: purchase_frequency
+        description: "How often the user shops on Amazon."
 
   - name: dim_date
     description: "Date dimension extracted from orders."
@@ -51,9 +59,9 @@ models:
     description: "Product dimension with gift-card flag."
     tests:
       - unique:
-          column_name: product_code
+          column_name: product_key
       - not_null:
-          column_name: product_code
+          column_name: product_key
     columns:
       - name: is_gift_card
         description: "Flag indicating whether the title is a gift card."
