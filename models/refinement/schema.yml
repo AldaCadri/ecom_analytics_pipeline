@@ -27,13 +27,26 @@ models:
       - name: purchase_frequency
         description: "How often the user shops on Amazon."
 
+  
   - name: dim_date
-    description: "Date dimension extracted from orders."
+    description: |
+      Canonical date dimension covering every calendar day
+      from the earliest order (2018-01-01) through the latest (up to 2024).
+      Includes standard date parts and weekend/week‐of‐year flags.
     tests:
-      - unique:
-          column_name: date_key
-      - not_null:
-          column_name: date_key
+      - unique: {column_name: date_key}
+      - not_null: {column_name: date_key}
+
+    columns:
+      - name: date_key
+        description: Date (YYYY-MM-DD) primary key.
+      - name: year
+      - name: quarter
+      - name: month
+      - name: day_of_month
+      - name: day_of_week
+      - name: is_weekend
+      - name: week_of_year
 
   - name: dim_user
     description: "User dimension derived from enriched orders."
