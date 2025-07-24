@@ -2,9 +2,9 @@
 
 with bounds as (
   select
-    min(date_key) as start_date,
-    max(date_key) as end_date
-  from {{ ref('fct_orders') }}
+    min(order_date) as start_date,
+    max(order_date) as end_date
+  from {{ ref('ref_orders_enriched') }}
 ),
 
 calendar as (
