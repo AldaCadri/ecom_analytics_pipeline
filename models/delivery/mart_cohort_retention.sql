@@ -1,38 +1,50 @@
 {{ config(materialized='view') }}
 
-with first_order as (
+with first_orders as (
   select
     user_key,
-    min(date_key) as first_date
+    min(date_key)              as cohort_date_key
   from {{ ref('fct_orders') }}
-  group by 1
+  group by user_key
 ),
 
--- derive cohort_month as the first day of the month of first_date
-cohorts as (
+all_orders as (
   select
-    fo.user_key,
-    d_month.date_key as cohort_month
-  from first_order fo
-  join {{ ref('dim_date') }} d_month
-    on fo.first_date = d_month.date_key
-  where d_month.day_of_month = 1
+    fo.cohort_date_key,
+    o.user_key,
+    o.date_key,
+    datediff(
+      month,
+      date_trunc('month', fo.cohort_date_key),
+      date_trunc('month', o.date_key)
+    )                         as months_after
+  from first_orders fo
+  join {{ ref('fct_orders') }} o
+    on fo.user_key = o.user_key
 ),
 
-events as (
+retention as (
   select
-    f.user_key,
-    c.cohort_month,
-    datediff('month', c.cohort_month, f.date_key) as months_after
-  from {{ ref('fct_orders') }} f
-  join cohorts c
-    on f.user_key = c.user_key
+    cohort_date_key,
+    months_after,
+    count(distinct user_key)  as active_users
+  from all_orders
+  group by 1,2
 )
 
 select
-  cohort_month,
-  months_after,
-  count(distinct user_key) as active_users
-from events
-group by 1,2
-order by 1,2
+  r.cohort_month,            -- the first-of-month date for each cohort
+  dd.year       as cohort_year,
+  r.months_after,
+  r.active_users
+from (
+  select
+    to_date(cohort_date_key)  as cohort_month,
+    cohort_date_key,
+    months_after,
+    active_users
+  from retention
+) r
+join {{ ref('dim_date') }} dd
+  on r.cohort_date_key = dd.date_key
+order by cohort_month, months_after
