@@ -13,7 +13,7 @@ join {{ ref('dim_date')    }}     d
 join {{ ref('dim_product') }}     p
   on f.product_key = p.product_key
 
-where d.year >= date_part('year', current_date()) - 2  
+--where d.year >= date_part('year', current_date()) - 2  
 
 group by 1,2,3
 order by 2 desc, 1 desc, 3
