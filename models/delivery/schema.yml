@@ -78,19 +78,33 @@ models:
         description: Average orders per user in the segment.
 
   - name: mart_cohort_retention
-    description: |
-      Cohort table showing how many users from each first-order month
-      return in each subsequent month.
-    tests:
-      - not_null: {column_name: cohort_month}
-      - not_null: {column_name: months_after}
+    description: >
+      Cohort retention view showing how many users placed orders after their first purchase month,
+      including retention percentage and cohort size.
     columns:
       - name: cohort_month
-        description: Month of each user’s first order.
+        description: First day of the month when the cohort started.
+        tests:
+          - not_null
+
+      - name: cohort_year
+        description: Year extracted from the cohort_date_key.
+
       - name: months_after
-        description: Months since first order.
+        description: Number of months after the initial cohort month.
+
       - name: active_users
-        description: Number of users still making orders.
+        description: Number of unique users active in the given month.
+        tests:
+          - not_null
+
+      - name: cohort_size
+        description: Total number of users in the cohort (month 0).
+        tests:
+          - not_null
+
+      - name: retention_pct
+        description: Percentage of users retained (active / cohort size * 100), rounded to 1 decimal place.
 
   - name: mart_top_products
     description: |
