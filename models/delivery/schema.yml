@@ -134,3 +134,31 @@ models:
         description: Number of orders in that segment.
       - name: total_revenue
         description: Sum of order_value in that segment.
+
+  - name: mart_revenue_vs_income_state_year
+    description: >
+      Aggregates total revenue and orders per state and year, enriched with median household income
+      and population data from U.S. Census. Used to analyze correlations between economic indicators
+      and purchasing behavior.
+
+    columns:
+      - name: state_name
+        description: Full name of the U.S. state.
+
+      - name: state_fips
+        description: FIPS code representing the U.S. state.
+
+      - name: year
+        description: The calendar year of the data (from order date and demographic survey).
+
+      - name: total_revenue
+        description: Total revenue generated from all orders in that state and year.
+
+      - name: total_orders
+        description: Total number of orders placed in that state and year.
+
+      - name: median_household_income
+        description: Median household income for that state and year, sourced from U.S. Census API.
+
+      - name: total_population
+        description: Total population of the state for that survey year.
