@@ -86,4 +86,17 @@ models:
       - not_null: {column_name: date_key}
       - not_null: {column_name: state_key}
       - not_null: {column_name: product_key}
-
+  
+  - name: dim_state_demographics
+    description: Dimension table combining demographic data per state and year, sourced from enriched orders.
+    columns:
+      - name: state_fips
+        description: Two-digit state FIPS code
+      - name: state_name
+        description: Full state name
+      - name: survey_year
+        description: Year the demographic data applies to
+      - name: median_household_income
+        description: Median household income in USD
+      - name: total_population
+        description: Total population of the state in that year
