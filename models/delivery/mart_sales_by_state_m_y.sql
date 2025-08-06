@@ -1,7 +1,7 @@
 {{ config(materialized='view') }}
 
 select
-  d.date_key           as month_label,         -- first of month from dim_date
+  date_trunc('month', d.date_key)::date as month_label,         
   d.year,
   d.month,
   s.state_name         as state_name,    

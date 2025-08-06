@@ -10,16 +10,15 @@ models:
     tests:
       - not_null: {column_name: month}
       - not_null: {column_name: year}
-      - not_null: {column_name: state_key}
+      - not_null: {column_name: state_name}
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns: [month, year, state_key]
+          combination_of_columns: [month, year, state_name]
     columns:
       - name: month
         description: The first day of the calendar month (time grain).
       - name: year
         description: Calendar year extracted from `month`.
-      - name: state_key
-        description: Two-digit FIPS code for the state (matches `dim_state.state_fips`).
+      - name: state_name
       - name: orders_count
         description: Number of orders in that state/month.
       - name: total_revenue
