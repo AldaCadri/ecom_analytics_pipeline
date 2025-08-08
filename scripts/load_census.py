@@ -4,7 +4,7 @@ import requests
 import snowflake.connector
 from dotenv import load_dotenv
 
-# Load credentials from .env
+# Load credentials from .env 
 load_dotenv()
 
 ctx = snowflake.connector.connect(
