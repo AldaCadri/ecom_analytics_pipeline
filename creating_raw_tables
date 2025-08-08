@@ -91,4 +91,3 @@ FROM (SELECT $1, $2, $3
 FILES = ('2025-07-21T11:48:57.522Z/state_codes.csv') 
 FILE_FORMAT = '"ECOM_ANALYTICS_DB"."RAW_DATA"."temp_file_format_2025-07-21T11:49:32.622Z"' 
 ON_ERROR=ABORT_STATEMENT 
--- For more details, see: https://docs.snowflake.com/en/sql-reference/sql/copy-into-table
