@@ -66,7 +66,7 @@ The **dbt DAG (Directed Acyclic Graph)** represents the complete flow of data fr
 It starts with **raw source tables**, moves into the **staging layer** where data is cleaned and standardized, then into the **refinement layer** where a **star schema** is implemented, and finally into the **delivery layer** where business-ready marts are produced.  
 This visual makes it easy to trace dependencies, ensuring transparency and maintainability.
 
-![Project Pipeline](images/Project_dag.png)
+![Project Pipeline](images/Project-dag.png)
 
 
 ## Layer Breakdown
