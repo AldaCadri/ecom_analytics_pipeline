@@ -115,6 +115,7 @@ This visual makes it easy to trace dependencies, ensuring transparency and maint
 
 ## Dashboard Features
 The interactive **Streamlit dashboard** is deployed and accessible here: [View Live Dashboard](https://aldacadri-ecom-analytics-pipeline-dashboard-appapp-test-oawfve.streamlit.app/)
+
 It contains **5 interactive tabs**:
 
 1. **Sales Overview** – Revenue trends, sales by state/year.  
