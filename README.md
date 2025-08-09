@@ -30,6 +30,7 @@ The project demonstrates an end-to-end analytics solution using real-world e-com
 ## Architecture
 Raw Data → Staging Layer → Refinement Layer (Star Schema) → Delivery Layer (Marts) → Streamlit Dashboard
 
+```mermaid
 flowchart LR
   A[Raw Data\nCSV · JSON · API] --> B[Staging Layer\nClean · Cast · Dedup]
   B --> C[Refinement Layer\nStar Schema: Fact + Dimensions]
@@ -43,3 +44,4 @@ flowchart LR
   classDef dash fill:#ede7f6,stroke:#5e35b1,color:#311b92;
 
   class A raw; class B stg; class C ref; class D del; class E dash;
+
