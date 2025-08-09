@@ -19,13 +19,20 @@ The project demonstrates an end-to-end analytics solution using real-world e-com
 
 ## Data Sources
 
+This project uses the **Open E-Commerce 1.0** dataset ([Harvard Dataverse link](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YGLYDY)), a first-of-its-kind public dataset containing detailed Amazon.com purchase histories from **5,027 U.S. consumers** between **2018–2022**, totaling over **1.8 million transactions**.  
 
-| Dataset | Description |
-|--------|-------------|
-| `amazon-purchases.csv` | 1.85M orders (2018–2024) |
-| `survey.csv` | User demographics |
-| `fields.csv` | Metadata |
-| U.S. Census API (json) | State income & population (2018–2023) |
+The dataset was crowdsourced via an online survey, with participants’ informed consent, and links each purchase to rich demographic, lifestyle data.   
+
+Additionally, U.S. Census **American Community Survey (ACS)** data ([data.census.gov](https://data.census.gov/)) is integrated via API to append **state-level median income** and **population** for 2018–2023.  
+
+| Dataset | File Name | Format | Description | Source |
+|---------|-----------|--------|-------------|--------|
+| Amazon Purchases | `amazon-purchases.csv` | CSV | 1.85M orders with date, product, price, quantity, shipping state | [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YGLYDY) |
+| Survey Data | `survey.csv` | CSV | Demographic, household, income, education, lifestyle data | [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YGLYDY) |
+| Survey Metadata | `fields.csv` | CSV | Column definitions and survey question metadata | [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YGLYDY) |
+| ACS State Demographics | API | JSON | Median household income & population by state/year (2018–2023) | [data.census.gov](https://data.census.gov/) |
+
+
 
 ## Architecture
 
@@ -49,13 +56,13 @@ flowchart LR
 ```
 ---
 
-## 🧱 Layer Breakdown
+## Layer Breakdown
 
 ### **Staging Layer**
 | Model | Purpose |
 |-------|---------|
 | `stg_amazon_purchases` | Cleans and type-casts order data, removes duplicates. |
-| `stg_survey` | Normalizes survey fields, sets Hispanic flag boolean. |
+| `stg_survey` | Normalizes survey fields, sets flag boolean. |
 | `stg_state_demographics` | Parses ACS JSON payloads into typed columns. |
 | `stg_state_codes` | Minimal mapping of postal/state/FIPS. |
 
@@ -92,17 +99,17 @@ flowchart LR
 
 ---
 
-## 📊 Dashboard Features
+## Dashboard Features
 Streamlit app with **5 interactive tabs**:
 1. **Sales Overview** – Revenue trends, sales by state/year.  
 2. **Category Performance** – Revenue & Avg. Order Value by category.  
 3. **Customer Insights** – Revenue by age, income, and other demographics.  
-4. **Cohort Analysis** – User retention curves.  
+4. **Cohort Analysis** – Loyalty tracking over months.  
 5. **Revenue vs Income** – Correlation between state income & purchasing.  
 
 ---
 
-## 📈 Example Business Questions Answered
+## Example Business Questions Answered
 - Do wealthier states generate more revenue?  
 - Are lower-income states showing purchasing growth?  
 - How does median household income correlate with revenue?  
@@ -111,8 +118,11 @@ Streamlit app with **5 interactive tabs**:
 
 ---
 
-## 🔐 Sensitive Data & Secrets
+## Sensitive Data & Secrets
 - All Snowflake credentials are stored in `.env` / `secrets.toml` (not committed to GitHub).
 - Example `.env` template is included for safe local setup.
 
 ---
+
+## Full Documentation
+For detailed transformation logic, schema tests, and SQL models, see the full PDF in the repo or click [here]() 
