@@ -56,51 +56,67 @@ flowchart LR
 ```
 ---
 
+## Star Schema
+
+![Star Schema](star_schema.png)
+
+## DAG Pipeline
+
+The **dbt DAG (Directed Acyclic Graph)** represents the complete flow of data from ingestion to delivery.  
+It starts with **raw source tables**, moves into the **staging layer** where data is cleaned and standardized, then into the **refinement layer** where a **star schema** is implemented, and finally into the **delivery layer** where business-ready marts are produced.  
+This visual makes it easy to trace dependencies, ensuring transparency and maintainability.
+
+![Project Pipeline](Project_dag.png)
+
+
 ## Layer Breakdown
 
 ### **Staging Layer**
-| Model | Purpose |
-|-------|---------|
-| `stg_amazon_purchases` | Cleans and type-casts order data, removes duplicates. |
-| `stg_survey` | Normalizes survey fields, sets flag boolean. |
-| `stg_state_demographics` | Parses ACS JSON payloads into typed columns. |
-| `stg_state_codes` | Minimal mapping of postal/state/FIPS. |
+| Model | Purpose | Link |
+|-------|---------|------|
+| `stg_amazon_purchases` | Cleans and type-casts order data, removes duplicates | [View SQL](models/staging/stg_amazon_purchases.sql) |
+| `stg_survey` | Normalizes survey fields, sets flag boolean | [View SQL](models/staging/stg_survey.sql) |
+| `stg_state_demographics` | Parses ACS JSON payloads into typed columns | [View SQL](models/staging/stg_state_demographics.sql) |
+| `stg_state_codes` | Minimal mapping of postal/state/FIPS | [View SQL](models/staging/stg_state_codes.sql) |
 
 ---
 
 ### **Refinement Layer (Star Schema)**
+
 #### **Fact Table**
-- `fct_orders` – Order grain, links all dimensions.
+- `fct_orders` – Order grain, links all dimensions | [View SQL](models/refinement/fct_orders.sql)
 
-#### **Dimensions**
-| Model | Purpose |
-|-------|---------|
-| `dim_user` | Customer demographics, household & account info. |
-| `dim_state` | Canonical state lookup (postal, name, FIPS). |
-| `dim_product` | SKU details, gift card flag. |
-| `dim_date` | Time dimension for analysis. |
-| `dim_state_demographics` | Median income & population by state/year. |
+**Dimensions**
+| Model | Purpose | Link |
+|-------|---------|------|
+| `dim_user` | Customer demographics, household & account info | [View SQL](models/refinement/dim_user.sql) |
+| `dim_state` | Canonical state lookup (postal, name, FIPS) | [View SQL](models/refinement/dim_state.sql) |
+| `dim_product` | SKU details, gift card flag | [View SQL](models/refinement/dim_product.sql) |
+| `dim_date` | Time dimension for analysis | [View SQL](models/refinement/dim_date.sql) |
+| `dim_state_demographics` | Median income & population by state/year | [View SQL](models/refinement/dim_state_demographics.sql) |
 
-#### **Enriched Orders**
-- `ref_orders_enriched` – Joins staging data with demographics and computed metrics.
+**Enriched Orders**
+- `ref_orders_enriched` – Joins staging data with demographics and computed metrics | [View SQL](models/refinement/ref_orders_enriched.sql)
 
 ---
 
 ### **Delivery Layer (Marts)**
-| Model | Purpose |
-|-------|---------|
-| `mart_sales_by_state_m_y` | Monthly sales by state. |
-| `mart_sales_by_category_m_y` | Monthly sales by category. |
-| `mart_customer_segment_metrics` | Revenue by demographic segments. |
-| `mart_cohort_retention` | Customer retention over time. |
-| `mart_top_products` | Top 50 products by revenue and units. |
-| `mart_revenue_by_income_state` | Revenue & order count by income bracket/state. |
-| `mart_revenue_vs_income_state_year` | Revenue vs median income per state/year. |
+| Model | Purpose | Link |
+|-------|---------|------|
+| `mart_sales_by_state_m_y` | Monthly sales by state | [View SQL](models/delivery/mart_sales_by_state_m_y.sql) |
+| `mart_sales_by_category_m_y` | Monthly sales by category | [View SQL](models/delivery/mart_sales_by_category_m_y.sql) |
+| `mart_customer_segment_metrics` | Revenue by demographic segments | [View SQL](models/delivery/mart_customer_segment_metrics.sql) |
+| `mart_cohort_retention` | Customer retention over time | [View SQL](models/delivery/mart_cohort_retention.sql) |
+| `mart_top_products` | Top 50 products by revenue and units | [View SQL](models/delivery/mart_top_products.sql) |
+| `mart_revenue_by_income_state` | Revenue & order count by income bracket/state | [View SQL](models/delivery/mart_revenue_by_income_state.sql) |
+| `mart_revenue_vs_income_state_year` | Revenue vs median income per state/year | [View SQL](models/delivery/mart_revenue_vs_income_state_year.sql) |
 
 ---
 
 ## Dashboard Features
-Streamlit app with **5 interactive tabs**:
+The interactive **Streamlit dashboard** is deployed and accessible here: [View Live Dashboard](https://aldacadri-ecom-analytics-pipeline-dashboard-appapp-test-oawfve.streamlit.app/)
+It contains **5 interactive tabs**:
+
 1. **Sales Overview** – Revenue trends, sales by state/year.  
 2. **Category Performance** – Revenue & Avg. Order Value by category.  
 3. **Customer Insights** – Revenue by age, income, and other demographics.  
@@ -123,6 +139,26 @@ Streamlit app with **5 interactive tabs**:
 - Example `.env` template is included for safe local setup.
 
 ---
+## Notes & Recommendations
+- **Incomplete Data:** Avoid using partial 2023–2024 records for trend analysis.  
+- **More Filters:** Add category, income, and product type filters in more dashboard tabs.  
+- **Incremental Models:** Use for large marts (e.g., cohorts, top products) with late-arriving data logic.  
+- **Automated Data Quality:** Send dbt test alerts to Slack/email for schema drift, null spikes, or duplicates.  
+- **Automated Orchestration:** Schedule builds with dbt Cloud or Snowflake Tasks.  
+- **Performance & Cost:** Pre-aggregate high-query marts with materialized views; monitor usage via `QUERY_HISTORY`.  
+- **Advanced Analytics:** CLV prediction, market basket analysis, price sensitivity, forecasting, and anomaly detection.  
+
+---
+
+## Future Work
+- Maintain **full-year snapshots** for consistent reporting.  
+- Improve category mapping to reduce “UNKNOWN” values and segment digital/gift card orders.  
+- Optimize performance with warehouse separation, clustering, and materialized views.  
+- Add advanced filtering, drill-through, and seasonal trend visuals to the dashboard.  
+- Introduce churn forecasting and executive-level summaries.  
+- Enrich with external datasets for added business context.  
+
+---
 
 ## Full Documentation
-For detailed transformation logic, schema tests, and SQL models, see the full PDF in the repo or click [here]() 
+For detailed transformation logic, schema tests, and SQL models, see the full PDF in the repo or click [here](Ecommerce_Analytics_Full_Documentation.pdf) 
