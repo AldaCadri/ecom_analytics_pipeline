@@ -1,0 +1,47 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: |
+      All raw input tables for the E-commerce Analytics pipeline, 
+      ingested into Snowflake’s `ecom_analytics_db.raw_data` schema.
+    
+    database: ecom_analytics_db
+
+    schema: raw_data
+    tables:
+      - name: raw_amazon_purchases
+        description: |
+          The raw Amazon export of ~1.85 M orders from 5 027 U.S. users,
+          covering 2018–2022.  
+          Fields:
+          • survey_response_id: links each order to a survey response  
+          • order_date: when the order was placed  
+          • shipping_address_state: 2-letter US state code  
+          • purchase_price_per_unit: unit price in USD  
+          • quantity: number of units  
+          • product_code: ASIN or ISBN  
+          • title: product title  
+          • category: product category
+      - name: raw_survey
+        description: |
+          Survey responses (5 027 rows) collected via an online questionnaire
+          from the same Amazon users.  
+          Each row includes demographics (age, gender, income_bracket, etc.)
+          and lifestyle/behavior flags, keyed by survey_response_id.
+      #- name: raw_fields
+      # description: |
+       #   Metadata for the survey: maps each column name in survey_raw
+       #   to a human-readable label and its data type.  
+       #   Used to document and validate survey fields in later models.
+      - name: raw_state_demographics
+        description: |
+          Raw JSON payloads loaded from the U.S. Census ACS 5-Year API
+          for 2018–2023, one record per state (50 states + DC + PR).  
+          Columns:
+          • survey_year: the year of the 5-Year estimate  
+          • json_payload: VARIANT array [state_name, median_income, total_population, state_fips]
+      
+      - name: raw_state_codes
+        description: |
+         Mapping state codes  

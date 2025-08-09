@@ -1,0 +1,102 @@
+version: 2
+
+models:
+
+  - name: ref_orders_enriched
+    description: "Orders enriched with user & state details plus order_value metric."
+    columns:
+      - name: age_group
+        description: "User age bracket from the survey (e.g. '25–34')."
+        tests: [not_null]
+      - name: is_hispanic
+        description: "Whether the user identifies as Hispanic/Latino."
+      - name: race
+        description: "User race category."
+      - name: education
+        description: "Highest education level attained by the user."
+      - name: income_bracket
+        description: "Household income bracket from the survey."
+      - name: gender
+        description: "Self-reported gender of the user."
+      - name: sexual_orientation
+        description: "Self-reported sexual orientation."
+      - name: accounts_shared_cat
+        description: "Category of Amazon accounts shared in household."
+      - name: household_size_cat
+        description: "Household size category."
+      - name: purchase_frequency
+        description: "How often the user shops on Amazon."
+
+  
+  - name: dim_date
+    description: |
+      Canonical date dimension covering every calendar day
+      from the earliest order (2018-01-01) through the latest (up to 2024).
+      Includes standard date parts and weekend/week‐of‐year flags.
+    tests:
+      - unique: {column_name: date_key}
+      - not_null: {column_name: date_key}
+
+    columns:
+      - name: date_key
+        description: Date (YYYY-MM-DD) primary key.
+      - name: year
+      - name: quarter
+      - name: month
+      - name: day_of_month
+      - name: day_of_week
+      - name: is_weekend
+      - name: week_of_year
+
+  - name: dim_user
+    description: "User dimension derived from enriched orders."
+    tests:
+      - unique:
+          column_name: user_key
+      - not_null:
+          column_name: user_key
+
+  - name: dim_state
+    description: "State dimension: postal ↔ name ↔ fips."
+    tests:
+      - unique:
+          column_name: state_postal
+      - not_null:
+          column_name: state_postal
+    columns:
+      - name: state_fips
+        tests:
+          - not_null
+
+  - name: dim_product
+    description: "Product dimension with gift-card flag."
+    tests:
+      - unique:
+          column_name: product_key
+      - not_null:
+          column_name: product_key
+    columns:
+      - name: is_gift_card
+        description: "Flag indicating whether the title is a gift card."
+
+  - name: fct_orders
+    description: "Fact table of orders with keys to date, user, state, and product."
+    tests:
+      - not_null: {column_name: user_key}
+      - not_null: {column_name: date_key}
+      - not_null: {column_name: state_key}
+      - not_null: {column_name: product_key}
+  
+  - name: dim_state_demographics
+    description: Dimension table combining demographic data per state and year, sourced from enriched orders.
+    columns:
+      - name: state_fips
+        description: Two-digit state FIPS code
+      - name: state_name
+        description: Full state name
+      - name: survey_year
+        description: Year the demographic data applies to
+      - name: median_household_income
+        description: Median household income in USD
+      - name: total_population
+        description: Total population of the state in that year
