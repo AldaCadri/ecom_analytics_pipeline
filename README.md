@@ -32,10 +32,10 @@ Raw Data → Staging Layer → Refinement Layer (Star Schema) → Delivery Layer
 
 ```mermaid
 flowchart LR
-  A[Raw Data\nCSV · JSON · API] --> B[Staging Layer\nClean · Cast · Dedup]
-  B --> C[Refinement Layer\nStar Schema: Fact + Dimensions]
-  C --> D[Delivery Layer\nCurated Marts]
-  D --> E[Streamlit Dashboard\nLive Snowflake Queries]
+  A["Raw Data<br>CSV · JSON · API"] --> B["Staging Layer<br>Clean · Cast · Dedup"]
+  B --> C["Refinement Layer<br>Star Schema: Fact + Dimensions"]
+  C --> D["Delivery Layer<br>Curated Marts"]
+  D --> E["Streamlit Dashboard<br>Live Snowflake Queries"]
 
   classDef raw fill:#e3f2fd,stroke:#1e88e5,color:#0d47a1;
   classDef stg fill:#e8f5e9,stroke:#43a047,color:#1b5e20;
@@ -44,4 +44,5 @@ flowchart LR
   classDef dash fill:#ede7f6,stroke:#5e35b1,color:#311b92;
 
   class A raw; class B stg; class C ref; class D del; class E dash;
+
 
