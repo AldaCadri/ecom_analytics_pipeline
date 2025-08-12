@@ -37,7 +37,7 @@ Additionally, U.S. Census **American Community Survey (ACS)** data ([data.census
 
 ## Architecture
 
-
+![Architecture](images/project_architecture.png)
 
 ```mermaid
 flowchart LR
@@ -55,8 +55,6 @@ flowchart LR
   class A raw; class B stg; class C ref; class D del; class E dash; 
 
 ```
-
-![Architecture](images/project_architecture.png)
 
 ---
 
