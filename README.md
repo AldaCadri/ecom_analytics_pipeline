@@ -54,6 +54,8 @@ flowchart LR
   class A raw; class B stg; class C ref; class D del; class E dash; 
 
 ```
+
+![Architecture](images/project_architecture.png)
 ---
 
 ## Star Schema
