@@ -33,6 +33,7 @@ Additionally, U.S. Census **American Community Survey (ACS)** data ([data.census
 | ACS State Demographics | API | JSON | Median household income & population by state/year (2018–2023) | [data.census.gov](https://data.census.gov/) |
 
 
+---
 
 ## Architecture
 
@@ -56,6 +57,7 @@ flowchart LR
 ```
 
 ![Architecture](images/project_architecture.png)
+
 ---
 
 ## Star Schema
